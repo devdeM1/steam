@@ -1,11 +1,11 @@
 from flask import make_response, abort
 from config import db
-from models import Users
+from models import User, Game, UserGame, Community, CommunityUser
 
 
 def read_all():
     # Create the list of games from our data
-    db_users = Users.query.all()
+    db_users = User.query.all()
     print(db_users)
     list_users = []
     for user in db_users:
@@ -35,7 +35,7 @@ def create(user):
     sex = user.get("sex")
 
     existing_user = (
-        Users.query.filter(Users.name == name).one_or_none()
+        User.query.filter(User.name == name).one_or_none()
     )
 
     # Does such a game exist?
@@ -47,7 +47,7 @@ def create(user):
         )
     # No
     else:
-        new_user = Users()
+        new_user = User()
         new_user.name = name
         new_user.date = date
         new_user.balance = balance
@@ -57,10 +57,11 @@ def create(user):
         db.session.commit()
 
 
-def read_one(received_user_id):
-    user = Users.query.filter(
-        Users.user_id == received_user_id
+def read_one(received_user_name):
+    user = User.query.filter(
+        User.name == received_user_name
     ).one_or_none()
+    print(user)
     if user:
         user_id = user.user_id
         name = user.name
@@ -80,14 +81,14 @@ def read_one(received_user_id):
     else:
         abort(
             404,
-            "User with {0} id not exist".format(received_user_id)
+            "User with {0} id not exist".format(received_user_name)
         )
 
 
-def update(received_user_id, user):
+def update(received_user_name, user):
     # Get the user requested from the db into session
-    update_user = Users.query.filter(
-        Users.user_id == received_user_id
+    update_user = User.query.filter(
+        User.name == received_user_name
     ).one_or_none()
 
     #
@@ -98,11 +99,11 @@ def update(received_user_id, user):
     sex = user.get("sex")
 
     existing_user = (
-        Users.query.filter(Users.name == name)
-        .filter(Users.date == date)
-        .filter(Users.balance == balance)
-        .filter(Users.country == country)
-        .filter(Users.sex == sex)
+        User.query.filter(User.name == name)
+        .filter(User.date == date)
+        .filter(User.balance == balance)
+        .filter(User.country == country)
+        .filter(User.sex == sex)
         .one_or_none()
     )
 
@@ -110,12 +111,12 @@ def update(received_user_id, user):
     if update_user is None:
         abort(
             404,
-            "User not found for Id: {received_game_id}".format(received_user_id),
+            "User not found for name: {0}".format(received_user_name),
         )
 
     # Would our update create a duplicate of another user already existing?
     elif (
-        existing_user is not None and existing_user.user_id != received_user_id
+        existing_user is not None
     ):
         abort(
             409,
@@ -139,9 +140,10 @@ def update(received_user_id, user):
         return 200
 
 
+# Change to received_user_name.Think about connection
 def delete(received_user_id):
     # Get the user requested
-    user = Users.query.filter(Users.user_id == received_user_id).one_or_none()
+    user = User.query.filter(User.user_id == received_user_id).one_or_none()
 
     # Did we find a user?
     if user is not None:
@@ -157,3 +159,62 @@ def delete(received_user_id):
             404,
             "User not found for Id: {user_id}".format(user_id=received_user_id),
         )
+
+
+def add_game(user_name, game_name):
+    user = User.query.filter(
+        User.name == user_name
+    ).one_or_none()
+
+    if user is None:
+        # User not exist
+        abort(
+            404,
+            "User {0} not exist".format(user_name),
+        )
+
+    game = Game.query.filter(
+        Game.name == game_name
+    ).one_or_none()
+
+    # Does such a game exist?
+    # No
+    if game is None:
+        abort(
+            404,
+            "Game {0} not exist(SALAM)".format(game_name),
+        )
+    new_user_game = UserGame()
+    new_user_game.game_id = game.game_id
+    new_user_game.user_id = user.user_id
+    db.session.add(new_user_game)
+    db.session.commit()
+
+
+def join_the_community(user_name, community_name):
+    user = User.query.filter(
+        User.name == user_name
+    ).one_or_none()
+
+    if user is None:
+        # User not exist
+        abort(
+            404,
+            "User {0} not exist".format(user_name),
+        )
+
+    community = Community.filter(
+        Community.name == community_name
+    ).one_or_none()
+
+    if community is None:
+        # User not exist
+        abort(
+            404,
+            "Community {0} not exist".format(community_name),
+        )
+    new_user_community = CommunityUser()
+    new_user_community.user_id = user.user_id
+    new_user_community.community_id = community.id
+    db.session.add(new_user_community)
+    db.session.commit()

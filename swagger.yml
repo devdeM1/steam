@@ -87,7 +87,7 @@ paths:
               point:
                 type: integer
                 description: Point of the game
-  /games/{received_game_id}:
+  /games/{received_game_name}:
     get:
       operationId: games.read_one
       tags:
@@ -95,10 +95,10 @@ paths:
       summary: Read one game
       description: Read one game
       parameters:
-        - name: received_game_id
+        - name: received_game_name
           in: path
-          description: Id of the game to get
-          type: integer
+          description: Name of the game to get
+          type: string
           required: True
       responses:
         200:
@@ -128,10 +128,10 @@ paths:
       summary: Update a game
       description: Update a game
       parameters:
-        - name: received_game_id
+        - name: received_game_name
           in: path
           description: Id of the game to get
-          type: integer
+          type: string
           required: True
         - name: game
           in: body
@@ -177,9 +177,9 @@ paths:
       summary: Delete a game from the games list
       description: Delete a game
       parameters:
-        - name: received_game_id
+        - name: received_game_name
           in: path
-          type: integer
+          type: string
           description: Id of the game to delete
           required: true
       responses:
@@ -269,7 +269,7 @@ paths:
               sex:
                 type: string
                 description: User Gender
-  /users/{received_user_id}:
+  /users/{received_user_name}:
     get:
       operationId: users.read_one
       tags:
@@ -277,10 +277,10 @@ paths:
       summary: Read user
       description: Read user
       parameters:
-        - name: received_user_id
+        - name: received_user_name
           in: path
-          description: Id of the user to get
-          type: integer
+          description: Name of the user to get
+          type: string
           required: True
       responses:
         200:
@@ -313,10 +313,10 @@ paths:
       summary: Update a user
       description: Update a user
       parameters:
-        - name: received_user_id
+        - name: received_user_name
           in: path
-          description: Id of the user to get
-          type: integer
+          description: Name of the user to get
+          type: string
           required: True
         - name: user
           in: body
@@ -368,11 +368,276 @@ paths:
       summary: Delete a user from the users list
       description: Delete a user
       parameters:
-        - name: received_user_id
+        - name: received_user_name
           in: path
-          type: integer
+          type: string
           description: Id of the user to delete
           required: true
       responses:
         200:
           description: Successfully deleted a user
+  /users/{user_name}/{game_name}:
+    put:
+      operationId: users.add_game
+      tags:
+        - Users
+      summary: Add a game for user
+      description: Add a game for user
+      parameters:
+        - name: user_name
+          in: path
+          description: Name of the user to add a game
+          type: string
+          required: True
+        - name: game_name
+          in: path
+          description: Name of the game to add
+          type: string
+          required: True
+      responses:
+        200:
+          description: Game added successfully
+  /users/{user_name}/community/{community_name}:
+    put:
+      operationId: users.join_the_community
+      tags:
+        - Users
+      summary: Sign in to the community
+      description: Sign in to the community
+      parameters:
+        - name: user_name
+          in: path
+          description: Name of the user
+          type: string
+          required: True
+        - name: community_name
+          in: path
+          description: Name of the community
+          type: string
+          required: True
+      responses:
+        200:
+          description: Successfully joined the group
+  /genre:
+    get:
+      operationId: genre.read_all
+      tags:
+        - Genre
+      summary: Read the entire set of genres, sorted by name
+      description: Read the entire set of genres, sorted by name
+      responses:
+        200:
+          description: Successfully read genres set operation
+          schema:
+            type: array
+            items:
+              properties:
+                genre_id:
+                  type: integer
+                  description: Id of the genre
+                name:
+                  type: string
+                  description: Name of the genre
+    post:
+      operationId: genre.create
+      tags:
+        - Genre
+      summary: Create a genre
+      description: Create a new genre
+      parameters:
+        - name: genre
+          in: body
+          description: Genre to create
+          required: True
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Name of the genre
+      responses:
+        201:
+          description: Successfully created genre
+          schema:
+            properties:
+              id:
+                type: integer
+                description: Id of the genre
+              name:
+                type: string
+                description: Name of the genre
+  /genres/{received_genre_name}:
+    get:
+      operationId: genre.read_one
+      tags:
+        - Genre
+      summary: Read genre
+      description: Read genre
+      parameters:
+        - name: received_genre_name
+          in: path
+          description: Name of the genre to get
+          type: string
+          required: True
+      responses:
+        200:
+          description: Successfully read genre from genres data operation
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: Id of the genre
+              name:
+                type: string
+                description: Name of the genre
+    put:
+      operationId: genre.update
+      tags:
+        - Genre
+      summary: Update a genre
+      description: Update a genre
+      parameters:
+        - name: received_genre_name
+          in: path
+          description: Name of the genre to get
+          type: string
+          required: True
+        - name: genre
+          in: body
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Name of the genre
+      responses:
+        200:
+          description: Successfully updated genre
+          schema:
+            properties:
+              id:
+                type: integer
+                description: Id of the genre
+              name:
+                type: string
+                description: Name of the genre
+    delete:
+      operationId: genre.delete
+      tags:
+        - Genre
+      summary: Delete a genre from the genres list
+      description: Delete a genre
+      parameters:
+        - name: received_genre_name
+          in: path
+          type: string
+          description: Name of the genre to delete
+          required: true
+      responses:
+        200:
+          description: Successfully deleted a genre
+  /community:
+    get:
+      operationId: community.read_all
+      tags:
+        - Community
+      summary: Read the entire set of community, sorted by name
+      description: Read the entire set of community, sorted by name
+      responses:
+        200:
+          description: Successfully read communities set operation
+          schema:
+            type: array
+            items:
+              properties:
+                id:
+                  type: integer
+                  description: Id of the community
+                name:
+                  type: string
+                  description: Name of the community
+    post:
+      operationId: community.create
+      tags:
+        - Community
+      summary: Create a community
+      description: Create a new community
+      parameters:
+        - name: community
+          in: body
+          description: Community to create
+          required: True
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Name of the community
+      responses:
+        201:
+          description: Successfully created community
+          schema:
+            properties:
+              id:
+                type: integer
+                description: Id of the community
+              name:
+                type: string
+                description: Name of the community
+  /community/{received_community_name}:
+    get:
+      operationId: community.read_one
+      tags:
+        - Community
+      summary: Read community
+      description: Read community
+      parameters:
+        - name: received_community_name
+          in: path
+          description: Name of the community to get
+          type: string
+          required: True
+      responses:
+        200:
+          description: Successfully read community from communities data operation
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: Id of the community
+              name:
+                type: string
+                description: Name of the community
+    put:
+      operationId: community.update
+      tags:
+        - Community
+      summary: Update a community
+      description: Update a community
+      parameters:
+        - name: received_community_name
+          in: path
+          description: Name of the community to get
+          type: string
+          required: True
+        - name: community
+          in: body
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Name of the community
+      responses:
+        200:
+          description: Successfully updated community
+          schema:
+            properties:
+              id:
+                type: integer
+                description: Id of the community
+              name:
+                type: string
+                description: Name of the community
