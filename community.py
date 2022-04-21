@@ -90,3 +90,21 @@ def update(received_community_name, community):
         db.session.commit()
         return 200
 
+
+def delete(received_community_name):
+    community = Community.query.filter(Community.name == received_community_name).one_or_none()
+
+    # Did we find a user?
+    if community is not None:
+        db.session.delete(community)
+        db.session.commit()
+        return make_response(
+            "Community {community_name} deleted".format(community_name=received_community_name), 200
+        )
+
+    # Otherwise, nope, didn't find that user
+    else:
+        abort(
+            404,
+            "Community {0} not found".format(received_community_name),
+        )

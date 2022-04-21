@@ -7,7 +7,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 class Game(db.Model):
     __tablename__ = "table_games"
-    game_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(32))
     price = db.Column(db.Integer)
     genre_id = db.Column(db.Integer, ForeignKey('table_genre.id'))
@@ -28,8 +28,8 @@ class User(db.Model):
 class UserGame(db.Model):
     __tablename__ = 'table_users_games'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, ForeignKey('table_users.user_id'))
-    game_id = db.Column(db.Integer, ForeignKey('table_games.game_id'))
+    user_id = db.Column(db.Integer, ForeignKey('table_users.user_id', ondelete='CASCADE'))
+    game_id = db.Column(db.Integer, ForeignKey('table_games.id', ondelete='CASCADE'))
 
 
 class Genre(db.Model):
@@ -47,12 +47,12 @@ class Community(db.Model):
 class CommunityUser(db.Model):
     __tablename__ = 'table_community_user'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, ForeignKey('table_users.user_id'))
-    community_id = db.Column(db.Integer, ForeignKey('table_community.id'))
+    user_id = db.Column(db.Integer, ForeignKey('table_users.user_id', ondelete='CASCADE'))
+    community_id = db.Column(db.Integer, ForeignKey('table_community.id', ondelete='CASCADE'))
 
 
 class CommunityGame(db.Model):
     __tablename__ = 'table_community_game'
     id = db.Column(db.Integer, primary_key=True)
-    game_id = db.Column(db.Integer, ForeignKey('table_games.game_id'))
-    community_id = db.Column(db.Integer, ForeignKey('table_community.id'))
+    game_id = db.Column(db.Integer, ForeignKey('table_games.id',ondelete='CASCADE'))
+    community_id = db.Column(db.Integer, ForeignKey('table_community.id', ondelete='CASCADE'))

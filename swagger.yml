@@ -26,7 +26,7 @@ paths:
             type: array
             items:
               properties:
-                game_id:
+                id:
                   type: integer
                   description: Id of the game
                 name:
@@ -72,7 +72,7 @@ paths:
           description: Successfully created game
           schema:
             properties:
-              game_id:
+              id:
                 type: integer
                 description: Id of the game
               name:
@@ -106,7 +106,7 @@ paths:
           schema:
             type: object
             properties:
-              game_id:
+              id:
                 type: integer
                 description: Id of the game
               name:
@@ -155,7 +155,7 @@ paths:
           description: Successfully updated game
           schema:
             properties:
-              game_id:
+              id:
                 type: integer
                 description: Id of the game
               name:
@@ -180,7 +180,7 @@ paths:
         - name: received_game_name
           in: path
           type: string
-          description: Id of the game to delete
+          description: Name of the game to delete
           required: true
       responses:
         200:
@@ -376,6 +376,53 @@ paths:
       responses:
         200:
           description: Successfully deleted a user
+  /users/{user_name}/community:
+    get:
+      operationId: users.view_community
+      tags:
+        - Users
+      summary: Read list of communities for user
+      description: Read list of communities for user
+      parameters:
+        - name: user_name
+          in: path
+          description: Name of the user
+          type: string
+          required: True
+      responses:
+        200:
+          description: Successfully read list of communities
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Name of the community
+  /users/{user_name}/games:
+    get:
+      operationId: users.view_games
+      tags:
+        - Users
+      summary: Read list of games for user
+      description: Read list of games for user
+      parameters:
+        - name: user_name
+          in: path
+          description: Name of the user
+          type: string
+          required: True
+      responses:
+        200:
+          description: Successfully read list of games
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Name of the game
+              genre:
+                type: string
+                description: Name of the genre
   /users/{user_name}/{game_name}:
     put:
       operationId: users.add_game
@@ -641,3 +688,18 @@ paths:
               name:
                 type: string
                 description: Name of the community
+    delete:
+      operationId: community.delete
+      tags:
+        - Community
+      summary: Delete a community from the communities list
+      description: Delete a community
+      parameters:
+        - name: received_community_name
+          in: path
+          type: string
+          description: Name of the community to delete
+          required: true
+      responses:
+        200:
+          description: Successfully deleted a community

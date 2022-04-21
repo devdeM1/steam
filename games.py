@@ -9,12 +9,12 @@ def read_all():
     list_games = []
 
     for game in db_games:
-        game_id = game.game_id
+        id = game.id
         name = game.name
         price = game.price
         genre = Genre.query.filter(Genre.id == game.genre_id).one_or_none().name
         point = game.point
-        data = {"game_id": game_id, "name": name, "price": price, "genre": genre, "point": point}
+        data = {"id": id, "name": name, "price": price, "genre": genre, "point": point}
         list_games.append(data)
     return list_games
 
@@ -22,13 +22,13 @@ def read_all():
 def read_one(received_game_name):
     one_game = Game.query.filter(Game.name == received_game_name).one_or_none()
     if one_game:
-        game_id = one_game.game_id
+        id = one_game.id
         name = one_game.name
         price = one_game.price
         genre = Genre.query.filter(Genre.id == one_game.genre_id).one_or_none()
         genre = genre.name
         point = one_game.point
-        data = {"game_id": game_id, "name": name, "price": price, "genre": genre, "point": point}
+        data = {"id": id, "name": name, "price": price, "genre": genre, "point": point}
 
         return data
     else:
@@ -132,23 +132,23 @@ def update(received_game_name, game):
 # Change to received_game_name.Think about connection
 
 
-def delete(received_game_id):
+def delete(received_game_name):
     # Get the game requested
-    game = Game.query.filter(Game.game_id == received_game_id).one_or_none()
+    game = Game.query.filter(Game.name == received_game_name).one_or_none()
 
     # Did we find a game?
     if game is not None:
         db.session.delete(game)
         db.session.commit()
         return make_response(
-            "Game {game_id} deleted".format(game_id=received_game_id), 200
+            "Game {0} deleted".format(received_game_name), 200
         )
 
     # Otherwise, nope, didn't find that game
     else:
         abort(
             404,
-            "Game not found for Id: {game_id}".format(game_id=received_game_id),
+            "Game {0} not found ".format(received_game_name),
         )
 
 

@@ -1,6 +1,6 @@
 from flask import make_response, abort
 from config import db
-from models import Genre
+from models import Genre, Game
 
 
 def read_all():
@@ -93,21 +93,25 @@ def update(received_genre_name, genre):
         return 200
 
 
-def delete(received_genre_id):
-    # Get the user requested
-    genre = Genre.query.filter(Genre.name == received_genre_id).one_or_none()
+def delete(received_genre_name):
+    genre = Genre.query.filter(Genre.name == received_genre_name).one_or_none()
 
-    # Did we find a user?
-    if genre is not None:
+    if genre is None:
+        abort(
+            404,
+            "Genre not found for name: {0}".format(received_genre_name),
+        )
+
+    # There is at least one game with this genre
+    game = Game.query.filter(Game.genre_id == genre.id).one_or_none()
+    if game:
+        abort(
+            404,
+            "Please, before deleting this genre, change it in the game {0}".format(game.name),
+        )
+    else:
         db.session.delete(genre)
         db.session.commit()
         return make_response(
-            "Genre {0} deleted".format(received_genre_id), 200
-        )
-
-    # Otherwise, nope, didn't find that user
-    else:
-        abort(
-            404,
-            "Genre not found for name: {name_genre}".format(game_genre=received_genre_id),
+            "Genre {0} deleted".format(received_genre_name), 200
         )

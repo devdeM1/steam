@@ -80,7 +80,7 @@ for connect in USERS_GAMES:
     game = Game.query.filter(Game.name == connect.get("game_name")).one_or_none()
     user = User.query.filter(User.name == connect.get("user_name")).one_or_none()
     c = UserGame(
-        game_id=game.game_id,
+        game_id=game.id,
         user_id=user.user_id
     )
     db.session.add(c)
@@ -105,7 +105,7 @@ for community_game in COMMUNITY_GAME:
     game = Game.query.filter(Game.name == community_game.get("game_name")).one_or_none()
     c_g = CommunityGame(
         community_id=community.id,
-        game_id=game.game_id
+        game_id=game.id
     )
     db.session.add(c_g)
 

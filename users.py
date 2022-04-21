@@ -1,6 +1,6 @@
 from flask import make_response, abort
 from config import db
-from models import User, Game, UserGame, Community, CommunityUser
+from models import User, Game, UserGame, Community, CommunityUser, Genre
 
 
 def read_all():
@@ -141,23 +141,23 @@ def update(received_user_name, user):
 
 
 # Change to received_user_name.Think about connection
-def delete(received_user_id):
+def delete(received_user_name):
     # Get the user requested
-    user = User.query.filter(User.user_id == received_user_id).one_or_none()
+    user = User.query.filter(User.name == received_user_name).one_or_none()
 
     # Did we find a user?
     if user is not None:
         db.session.delete(user)
         db.session.commit()
         return make_response(
-            "User {user_id} deleted".format(user_id=received_user_id), 200
+            "User {user} deleted".format(user=received_user_name), 200
         )
 
     # Otherwise, nope, didn't find that user
     else:
         abort(
             404,
-            "User not found for Id: {user_id}".format(user_id=received_user_id),
+            "User {0} not found".format(received_user_name),
         )
 
 
@@ -185,7 +185,7 @@ def add_game(user_name, game_name):
             "Game {0} not exist(SALAM)".format(game_name),
         )
     new_user_game = UserGame()
-    new_user_game.game_id = game.game_id
+    new_user_game.game_id = game.id
     new_user_game.user_id = user.user_id
     db.session.add(new_user_game)
     db.session.commit()
@@ -203,7 +203,7 @@ def join_the_community(user_name, community_name):
             "User {0} not exist".format(user_name),
         )
 
-    community = Community.filter(
+    community = Community.query.filter(
         Community.name == community_name
     ).one_or_none()
 
@@ -218,3 +218,58 @@ def join_the_community(user_name, community_name):
     new_user_community.community_id = community.id
     db.session.add(new_user_community)
     db.session.commit()
+
+
+def view_community(user_name):
+    user = User.query.filter(
+        User.name == user_name
+    ).one_or_none()
+
+    if user is None:
+        # User not exist
+        abort(
+            404,
+            "User {0} not exist".format(user_name),
+        )
+    else:
+        db_communities = CommunityUser.query.filter(CommunityUser.user_id == user.user_id).all()
+        list_communities = []
+        for community in db_communities:
+            community_for_output = Community.query.filter(
+                Community.id == community.community_id
+            ).one_or_none()
+            name = community_for_output.name
+            data = {
+                "name": name,
+            }
+            list_communities.append(data)
+        return list_communities
+
+
+def view_games(user_name):
+    user = User.query.filter(
+        User.name == user_name
+    ).one_or_none()
+
+    if user is None:
+        # User not exist
+        abort(
+            404,
+            "User {0} not exist".format(user_name),
+        )
+    else:
+        library = UserGame.query.filter(UserGame.user_id == user.user_id).all()
+        list_games = []
+        for game_user in library:
+            game = Game.query.filter(
+                Game.id == game_user.game_id
+            ).one_or_none()
+            genre = Genre.query.filter(Genre.id == game.genre_id).one_or_none().name
+            name = game.name
+            data = {
+                "name": name,
+                "genre": genre,
+            }
+            list_games.append(data)
+        return list_games
+
