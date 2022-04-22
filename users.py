@@ -161,7 +161,7 @@ def delete(received_user_name):
         )
 
 
-def add_game(user_name, game_name):
+def buy_game(user_name, game_name):
     user = User.query.filter(
         User.name == user_name
     ).one_or_none()
@@ -182,12 +182,19 @@ def add_game(user_name, game_name):
     if game is None:
         abort(
             404,
-            "Game {0} not exist(SALAM)".format(game_name),
+            "Game {0} not exist".format(game_name),
+        )
+
+    if user.balance < game.price:
+        abort(
+            404,
+            "Not enough balance"
         )
     new_user_game = UserGame()
     new_user_game.game_id = game.id
     new_user_game.user_id = user.user_id
     db.session.add(new_user_game)
+    user.balance -= game.price
     db.session.commit()
 
 
@@ -273,3 +280,22 @@ def view_games(user_name):
             list_games.append(data)
         return list_games
 
+
+def deposit(user_name, sum):
+    user = User.query.filter(
+        User.name == user_name
+    ).one_or_none()
+
+    if user is None:
+        # User not exist
+        abort(
+            404,
+            "User {0} not exist".format(user_name),
+        )
+    else:
+        print(user.balance)
+        print(sum)
+        user.balance = user.balance + int(sum)
+        db.session.commit()
+        return 'Dear {user_name} your deposit was successfully processed and credited to the account.' \
+               'Your balance now:{user_balance}'.format(user_name=user.name, user_balance=user.balance)

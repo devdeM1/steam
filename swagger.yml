@@ -425,20 +425,20 @@ paths:
                 description: Name of the genre
   /users/{user_name}/{game_name}:
     put:
-      operationId: users.add_game
+      operationId: users.buy_game
       tags:
         - Users
-      summary: Add a game for user
-      description: Add a game for user
+      summary: Buy a game for user
+      description: Buy a game for user
       parameters:
         - name: user_name
           in: path
-          description: Name of the user to add a game
+          description: Name of the user to buy a game
           type: string
           required: True
         - name: game_name
           in: path
-          description: Name of the game to add
+          description: Name of the game to buy
           type: string
           required: True
       responses:
@@ -465,6 +465,27 @@ paths:
       responses:
         200:
           description: Successfully joined the group
+  /users/{user_name}/balance/{sum}:
+    put:
+      operationId: users.deposit
+      tags:
+        - Users
+      summary: Deposit
+      description: Deposit
+      parameters:
+        - name: user_name
+          in: path
+          description: Name of the user
+          type: string
+          required: True
+        - name: sum
+          in: path
+          description: Sum of the money to deposit
+          type: string
+          required: True
+      responses:
+        200:
+          description: Deposit was successfully processed and credited to the account
   /genre:
     get:
       operationId: genre.read_all
