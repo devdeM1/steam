@@ -2,6 +2,8 @@ import os
 import connexion
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -11,6 +13,7 @@ connex_app = connexion.App(__name__, specification_dir=basedir)
 # Get the underlying Flask app instance
 app = connex_app.app
 
+
 # Build the Sqlite ULR for SqlAlchemy
 database_url = "postgresql+psycopg2://user_postgres:qwerty123255@localhost:5432/user_postgres"
 
@@ -18,6 +21,9 @@ database_url = "postgresql+psycopg2://user_postgres:qwerty123255@localhost:5432/
 app.config["SQLALCHEMY_ECHO"] = False
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.secret_key = 'super secret key'
+
+
 
 # Create the SqlAlchemy db instance
 db = SQLAlchemy(app)

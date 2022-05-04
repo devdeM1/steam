@@ -185,6 +185,28 @@ paths:
       responses:
         200:
           description: Successfully deleted a game
+  /games/stats/{received_game_name}:
+    get:
+      operationId: stats.stats_for_one_game
+      tags:
+        - Games
+      summary: Number of all users for this game
+      description: Number of all users for this game
+      parameters:
+        - name: received_game_name
+          in: path
+          description: Name of the game to get
+          type: string
+          required: True
+      responses:
+        200:
+          description: Successfully
+          schema:
+            type: object
+            properties:
+              count:
+                type: integer
+                description: Number of users
   /users:
     get:
       operationId: users.read_all
@@ -724,3 +746,40 @@ paths:
       responses:
         200:
           description: Successfully deleted a community
+  /stats:
+    get:
+      operationId: stats.every_game
+      tags:
+        - Stats
+      summary: Stats for every game
+      description: Stats for every game
+      responses:
+        200:
+          description: Successfully
+          schema:
+            type: array
+            items:
+              properties:
+                name:
+                  type: string
+                  description: Name of the game
+                count:
+                  type: integer
+                  description: Number of users
+  /stats/users:
+    get:
+      operationId: stats.all_users
+      tags:
+        - Stats
+      summary: Number of all users
+      description: Number of all users
+      responses:
+        200:
+          description: Successfully
+          schema:
+            type: array
+            items:
+              properties:
+                count:
+                  type: integer
+                  description: Number of users

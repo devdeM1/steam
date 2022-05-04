@@ -11,8 +11,23 @@ GAMES = [
 ]
 
 USERS = [
-    {"name": "Maks", "date": "02.02.2002", "balance": 100, "country": "Belarus", "sex": "man"},
-    {"name": "Dima", "date": "03.03.2003", "balance": 777, "country": "Belarus", "sex": "man"},
+    {"name": "Maks",
+     "date": "02.02.2002",
+     "balance": 100,
+     "country": "Belarus",
+     "sex": "man",
+     "login": "maks",
+     "password": "1111",
+     "email": "kyky@qq.com"},
+    {"name": "Dima",
+     "date": "03.03.2003",
+     "balance": 777,
+     "country": "Belarus",
+     "sex": "man",
+     "login": "dima",
+     "password": "1234",
+     "email": "kyky@qq.com"
+     },
 ]
 
 USERS_GAMES = [
@@ -72,7 +87,10 @@ for user in USERS:
         date=user.get("date"),
         balance=user.get("balance"),
         country=user.get("country"),
-        sex=user.get("sex")
+        sex=user.get("sex"),
+        login=user.get("login"),
+        password=user.get("password"),
+        email=user.get("email")
     )
     db.session.add(u)
 
