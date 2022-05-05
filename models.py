@@ -16,7 +16,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 class Game(db.Model):
     __tablename__ = "table_games"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(32))
+    name = db.Column(db.String(128))
     price = db.Column(db.Integer)
     genre_id = db.Column(db.Integer, ForeignKey('table_genre.id'))
     point = db.Column(db.Integer)

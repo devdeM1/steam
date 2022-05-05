@@ -166,6 +166,7 @@ def buy_game(user_name, game_name):
         User.name == user_name
     ).one_or_none()
 
+
     if user is None:
         # User not exist
         abort(
@@ -185,6 +186,17 @@ def buy_game(user_name, game_name):
             "Game {0} not exist".format(game_name),
         )
 
+    #You have this game&
+    all_your_games = UserGame.query.filter(UserGame.user_id == user.user_id).all()
+    previously_purchased_game = False
+    for your_game in all_your_games:
+        if game.id == your_game.game_id:
+            previously_purchased_game = True
+    if previously_purchased_game:
+        abort(
+            404,
+            "You have this game"
+        )
     if user.balance < game.price:
         abort(
             404,
