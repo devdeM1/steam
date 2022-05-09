@@ -23,6 +23,12 @@ app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.secret_key = 'super secret key'
 
+# set optional bootswatch theme
+app.config['BASIC_AUTH_USERNAME'] = 'devdem'
+app.config['BASIC_AUTH_PASSWORD'] = 'devdemisadmin'
+app.config['BASIC_AUTH_FORCE'] = True
+app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
+
 
 
 # Create the SqlAlchemy db instance

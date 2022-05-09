@@ -2,12 +2,14 @@
 from config import db, ma, app
 from sqlalchemy import Table, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
+from flask_login import UserMixin
+
 import os
 from flask import Flask, url_for, redirect, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from wtforms import form, fields, validators
 import flask_admin as admin
-import flask_login as login
+
 from flask_admin.contrib import sqla
 from flask_admin import helpers, expose
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -24,7 +26,7 @@ class Game(db.Model):
     # Добавить поле ограничение возраста
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = "table_users"
     user_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(32))
@@ -33,10 +35,19 @@ class User(db.Model):
     country = db.Column(db.String(32))
     sex = db.Column(db.String(32))
     email = db.Column(db.String(120))
-    password = db.Column(db.String(128))
-    login = db.Column(db.String(64))
+    password_hash = db.Column(db.String(128))
 
-    # Flask-Login integration
+    def __repr__(self):
+        return '<User {}>'.format(self.username)
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+
+'''   # Flask-Login integration
     # NOTE: is_authenticated, is_active, and is_anonymous
     # are methods in Flask-Login < 0.3.0
     @property
@@ -57,7 +68,7 @@ class User(db.Model):
     # Required for administrative interface
     def __unicode__(self):
         return self.name
-
+'''
 
 class UserGame(db.Model):
     __tablename__ = 'table_users_games'
@@ -92,10 +103,12 @@ class CommunityGame(db.Model):
     community_id = db.Column(db.Integer, ForeignKey('table_community.id', ondelete='CASCADE'))
 
 
-# Define login and registration forms (for flask-login)
+'''# Define login and registration forms (for flask-login)
 class LoginForm(form.Form):
     login = fields.StringField(validators=[validators.DataRequired()])
     password = fields.PasswordField(validators=[validators.DataRequired()])
+    remember_me = BooleanField('Remember Me')
+    submit = SubmitField('Sign In')
 
     def validate_login(self, field):
         user = self.get_user()
@@ -201,3 +214,5 @@ def index():
 
 # Initialize flask-login
 init_login()
+
+'''

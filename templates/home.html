@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Application Home Page</title>
-</head>
-<body>
-    <h2>
-        Hello World!
-    </h2>
-    <img src="limbo.jpg">
-</body>
-</html>
+<div>
+    Microblog:
+    <a href="{{ url_for('home1') }}">Home</a>
+    {% if current_user.is_anonymous %}
+    <a href="{{ url_for('login') }}">Login</a>
+    {% else %}
+    <a href="{{ url_for('logout') }}">Logout</a>
+    {% endif %}
+</div>
