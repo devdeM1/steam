@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <hr>
+    Catalog:
+    {% for game in games %}
+    <p>
+        <b> Game:{{ game.name }}
+            Price:{{ game.price }}
+            genre:{{ game.genre }}
+            point:{{ game.point }}
+        </b>
+    </p>
+    {% endfor %}
+{% endblock %}

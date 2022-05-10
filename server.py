@@ -6,7 +6,7 @@ Main module of the server file
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from forms import LoginForm, RegistrationForm
-from models import User
+from models import User, Game, UserGame, Genre
 from flask_admin import Admin
 from config import db, app
 from flask_admin.contrib.sqla import ModelView
@@ -106,6 +106,42 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
+
+@app.route('/user/<name>')
+@login_required
+def user(name):
+    user = User.query.filter_by(name=name).first_or_404()
+    library = UserGame.query.filter(UserGame.user_id == user.user_id).all()
+    list_games = []
+    for game_user in library:
+        game = Game.query.filter(
+            Game.id == game_user.game_id
+        ).one_or_none()
+        genre = Genre.query.filter(Genre.id == game.genre_id).one_or_none().name
+        name = game.name
+        data = {
+            "name": name,
+            "genre": genre,
+        }
+        list_games.append(data)
+    return render_template('user.html', user=user, games=list_games)
+
+
+@app.route('/catalog')
+def catalog():
+    db_games = Game.query.order_by(Game.name).all()
+    list_games = []
+
+    for game in db_games:
+        id = game.id
+        name = game.name
+        price = game.price
+        genre = Genre.query.filter(Genre.id == game.genre_id).one_or_none().name
+        point = game.point
+        data = {"id": id, "name": name, "price": price, "genre": genre, "point": point}
+        list_games.append(data)
+    return render_template('catalog.html', games=list_games)
 
 if __name__ == "__main__":
     connex_app.run(debug=True)
