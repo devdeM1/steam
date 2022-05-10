@@ -404,8 +404,6 @@ for user in USERS:
         balance=user.get("balance"),
         country=user.get("country"),
         sex=user.get("sex"),
-        login=user.get("login"),
-        password=user.get("password"),
         email=user.get("email")
     )
     db.session.add(u)
