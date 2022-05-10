@@ -30,11 +30,13 @@ class User(UserMixin, db.Model):
     __tablename__ = "table_users"
     user_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(32))
+    second_name = db.Column(db.String(32))
     date = db.Column(db.String(32))
     balance = db.Column(db.Integer)
     country = db.Column(db.String(32))
     sex = db.Column(db.String(32))
     email = db.Column(db.String(120))
+    phone_number = db.Column(db.String(120))
     password_hash = db.Column(db.String(128))
 
     def __repr__(self):
