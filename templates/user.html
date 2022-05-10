@@ -2,17 +2,13 @@
 
 {% block content %}
     <h1>User: {{ user.name }}</h1>
-    <hr>
-    Your games:
-    {% for game in games %}
-    <p>
-        <b>{{ game.name }}</b>
-    </p>
-    {% endfor %}
+
+    <br>
     Name:{{ user.name }}<br>
     Second name:{{ user.second_name }}<br>
     Country:{{ user.country }}<br>
     Sex:{{ user.sex }}<br>
     Email:{{ user.email }}<br>
     Phone Number:{{ user.phone_number }}<br>
+    <a href="{{ url_for('edit',user_id=current_user.user_id) }}">Edit</a>
 {% endblock %}
