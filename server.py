@@ -141,7 +141,7 @@ def catalog():
         point = game.point
         data = {"id": id, "name": name, "price": price, "genre": genre, "point": point}
         list_games.append(data)
-    return render_template('catalog.html', games=list_games)
+    return render_template('catalog.html', title='Hello everybody' ,games=list_games)
 
 
 @app.route('/edit/<user_id>', methods=['GET', 'POST'])

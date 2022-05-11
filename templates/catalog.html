@@ -11,5 +11,28 @@
             point:{{ game.point }}
         </b>
     </p>
+    <h2 class="home-title">Catalog of games</h2>
+	<section class="content">
+
+		<a href="" class="game-card game-card__big">
+			<div class="game-photo game-photo__bg">
+				<img src="img/game/shopgames/3.png" alt="">
+			</div>
+			<div class="game-info">
+				<h4>Rainbow Six Siege</h4>
+				<span class="game-genre">Action, Shooter, Adventure</span>
+				<div class="game-price"><span>$25.60</span>
+
+					<div class="game-platforms">
+						<img src="img/icons/ps.svg" alt="Playstation"><img src="img/icons/xbox.svg" alt="Xbox">
+					</div>
+
+				</div>
+			</div>
+		</a>
+	</section>
     {% endfor %}
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static',filename='js/script.js') }}"></script>
 {% endblock %}
