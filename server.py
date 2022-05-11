@@ -171,13 +171,22 @@ def catalog():
 @app.route('/page_game/<game_id>')
 def page_game(game_id):
     game = Game.query.filter(Game.id == game_id).one_or_none()
-    name = game.name
-    price = game.price
-    genre = Genre.query.filter(Genre.id == game.genre_id).one_or_none().name
-    point = game.point
-    pic_path = game.pic_path
-    data = {"id": id, "name": name, "price": price, "genre": genre, "point": point, "pic_path": pic_path}
-    return render_template('page_game.html', game=data)
+    if game is None:
+        flash('Invalid game')
+        return render_template('catalog.html')
+    else:
+        genre = Genre.query.filter(Genre.id == game.genre_id).one_or_none().name
+        data = {
+                "name": game.name,
+                "price": game.price,
+                "genre": genre,
+                "point": game.point,
+                "pic_path": game.pic_path,
+                "text": game.text,
+                "developer": game.developer,
+                "date": game.date,
+                "platform": game.platform}
+        return render_template('page_game.html', game=data)
 
 
 @app.route('/edit/<user_id>', methods=['GET', 'POST'])
@@ -239,6 +248,85 @@ def my_games(name):
         }
         list_games.append(data)
     return render_template('my_games.html', games=list_games)
+
+
+@app.route('/<user_name>/buy_game/<game_name>')
+@login_required
+def buy_game(user_name, game_name):
+    user = User.query.filter(
+        User.name == user_name
+    ).one_or_none()
+
+    if user is None:
+        # User not exist
+        flash(
+            404,
+            "User {0} not exist"
+        )
+
+    game = Game.query.filter(
+        Game.name == game_name
+    ).one_or_none()
+
+    # Does such a game exist?
+    # No
+    if game is None:
+        flash(
+            404,
+            "Game  not exist",
+        )
+
+    # You have this game&
+    all_your_games = UserGame.query.filter(UserGame.user_id == user.user_id).all()
+    previously_purchased_game = False
+    for your_game in all_your_games:
+        if game.id == your_game.game_id:
+            previously_purchased_game = True
+    if previously_purchased_game:
+        flash(
+            "You have this game"
+
+        )
+        library = UserGame.query.filter(UserGame.user_id == user.user_id).all()
+        list_games = []
+        for game_user in library:
+            game = Game.query.filter(
+                Game.id == game_user.game_id
+            ).one_or_none()
+            genre = Genre.query.filter(Genre.id == game.genre_id).one_or_none().name
+            name = game.name
+            data = {
+                "name": name,
+                "genre": genre,
+            }
+            list_games.append(data)
+        return render_template('my_games.html', games=list_games)
+    if user.balance < game.price:
+        flash(
+            "Not enough balance"
+        )
+        return render_template('page_game.html', game=game)
+    new_user_game = UserGame()
+    new_user_game.game_id = game.id
+    new_user_game.user_id = user.user_id
+    db.session.add(new_user_game)
+    user.balance -= game.price
+    db.session.commit()
+    library = UserGame.query.filter(UserGame.user_id == user.user_id).all()
+    list_games = []
+    for game_user in library:
+        game = Game.query.filter(
+            Game.id == game_user.game_id
+        ).one_or_none()
+        genre = Genre.query.filter(Genre.id == game.genre_id).one_or_none().name
+        name = game.name
+        data = {
+            "name": name,
+            "genre": genre,
+        }
+        list_games.append(data)
+    return render_template('my_games.html', games=list_games)
+
 
 
 @app.route('/<name>/my_communities', methods=['GET', 'POST'])

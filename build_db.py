@@ -74,7 +74,8 @@ GAMES = [
     {"name": "Don't Starve Together", "price": 8, "genre": "Crafting", "point": 9},
     {"name": "Car Mechanic Simulator 2021", "price": 10, "genre": "Driving", "point": 9, "pic_path": "Car Mechanic Simulator 2021"},
     {"name": "Skul: The Hero Slayer", "price": 7, "genre": "2D", "point": 9},
-    {"name": "7 Days to Die", "price": 15, "genre": "Open World", "point": 8, 'pic_path': "7days"},
+    {"name": "7 Days to Die", "price": 15, "genre": "Open World", "point": 8,"platform":"Microsoft Windows, OS X, Linux, PlayStation 4, Xbox One", "developer": "The Fun Pimps ",
+     "date": "13.12.2013", "text": "Это воксельная игра про выживание среди зомби-апокалипсиса, в которой игроки могут сообща строить свои общины, отбиваться от толп зомби и стараться выжить. Зомби в этой игре становятся агрессивнее с каждой ночью, поэтому игроки должны озаботиться защитой от зараженных в темное время суток."},
     {"name": "WARRIORS OROCHI 4 Ultimate Deluxe Edition", "price": 20, "genre": "Action", "point": 7},
     {"name": "WorldBox - God Simulator", "price": 10, "genre": "Sandbox", "point": 9},
     {"name": "Mount & Blade II: Bannerlord", "price": 30, "genre": "Action", "point": 9},
@@ -390,7 +391,10 @@ for game in GAMES:
         genre_id=genre.id,
         point=game.get("point"),
         pic_path=game.get("name"),
-        text=game.get("text")
+        text=game.get("text"),
+        developer=game.get("developer"),
+        date=game.get("date"),
+        platform=game.get("platform"),
     )
     db.session.add(p)
 

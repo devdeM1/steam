@@ -2,25 +2,83 @@
 
 
 {% block content %}
-<hr>
-    <a href="{{ url_for('page_game', game_id=game.id) }}" class="game-card game-card__big">
-				<div class="game-photo game-photo__bg">
-					<img src="{{ url_for('static',filename='img/catalog/{}'.format(game.pic_path)) }}" alt="">
-				</div>
-				<div class="game-info">
-					<h4>{{game.name}}</h4>
-					<span class="game-genre">{{game.genre}}</span>
-					<div class="game-price"><span>$ {{game.price}}</span>
-						<a href="{{ url_for('my_games', name=current_user.name )}}">Buy game ${{game.price}}</a>
-					</div>
-				</div>
-				<div class="screens">
-					{% for img in images %}
-						<img src="{{ url_for('static',filename='img/catalog/{}'.format(game.pic_path)) }}" alt="">
-					{% endfor %}
-				</div>
-		<div class="screens">
+<section class="content">
+    <div class="game-card game-card__order">
+        <div class="game-photo game-photo__order">
+            <img src="{{ url_for('static',filename='img/catalog/{}'.format(game.pic_path)) }}" alt="">
+        </div>
+        <div class="game-info game-info__order">
+            <a href="#" class="btn-filter">НОВИНКА</a>
+            <h2 class="game-page-name">{{game.name}}</h2>
+            <ul>
+                <li>Категория: <span>{{game.genre}}</span></li>
+                <li>Разработчик: <span>{{game.developer}}</span></li>
+                <li>Дата выхода: <span>{{game.date}}</span></li>
+                <li>Платформы: <span>{{game.platform}}</span></li>
+            </ul>
+            <div class="game-price">
+                <span>${{game.price}}</span>
+                {% if current_user.is_anonymous %}
+                {% else %}
+                <a href="{{ url_for('buy_game', user_name=current_user.name, game_name=game.name) }}">
+                    <button class="btn-cart">Заказать</button>
+                </a>
+                {% endif %}
 
-				</div>
-			</a>
+            </div>
+        </div>
+    </div>
+
+
+    <ul class="char-nav">
+        <li class="char-nav-link char-nav-link-active">Описание</li>
+        <li class="char-nav-link">Продажи</li>
+        <li class="char-nav-link">Дополнения</li>
+        <li class="char-nav-link">Отзывы</li>
+    </ul>
+
+    <ul class="char-tabs">
+        <li class="char-tabs-all">
+            {{game.text}}
+            </div>
+        </li>
+        <li class="char-tabs-all">
+            Выход игры состоялся 10 мая 2016 года, одновременно во всём мире.
+            Игра доступна в трёх вариантах изданий помимо стандартного. Special Edition, Libertalia Collector’s Edition
+            и цифровом Digital Standard Edition.
+            <br>
+            <br>
+            Всего за неделю с релиза игра продалась по всему миру в количестве в 2,7 млн копий и стала самой быстро
+            продаваемой игрой в истории серии. В мае Uncharted 4 возглавил чарт продаж видеоигр на территории США
+            и Великобритании. На 21 декабря 2016 года игра продалась по всему миру в количестве более 8,7 млн копий,
+            что делает её самой продаваемой игрой в истории студии.
+        </li>
+        <li class="char-tabs-all">
+            4 декабря 2016 на мероприятии PlayStation Experience 2016 состоялся анонс спин-оффа игры,
+            Uncharted: The Lost Legacy, где главными героями являются Хлоя Фрейзер и Надин Росс
+        </li>
+        <li class="char-tabs-all">
+            По итогам выставки E3 2015 Uncharted 4 был признан лучшей консольной игрой, лучшей приключенческой игрой,
+            а также получил специальный приз за графику. 5 мая 2016 года компания Sony сняла эмбарго на публикацию
+            обзоров. Игра получила высокие оценки и восторженные отзывы от СМИ, освещающих игровую индустрию.
+            <br>
+            <br>
+            На сайте-агрегаторе Metacritic.com игра имеет средний балл, равный 93 из 100, основываясь на 112 обзорах,
+            110 из которых положительные, 1 смешанный и 1 негативный. Единственный отрицательный обзор написали
+            The Washington Post, поставив игре 4 балла из 10. Данный отзыв вызвал недовольство фанатов Uncharted,
+            которые создали петицию на change.org с просьбой к Metacritic не учитывать этот обзор.
+            <br>
+            <br>
+            В 2016 году игра Uncharted 4 заняла первое место в рейтинге Metacritic, набрав 93 балла из 100.
+            Русскоязычные СМИ также оставили положительные отзывы об игре. Такие издания, как 3D News, PlayGround.ru,
+            «Игромания» и др. поставили игре максимальные оценки. По выбору редакции журнала «Игромания» Uncharted 4
+            стал победителем в номинации «Игра года». Также редакция PlayGround.ru признала Uncharted 4: A Thief’s
+            End лучшей игрой 2016 года.
+        </li>
+    </ul>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="../js/page-game.js"></script>
+<script src="../js/script.js"></script>
 {% endblock %}

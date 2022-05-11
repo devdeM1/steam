@@ -42,7 +42,6 @@
                 <p><a href="{{ url_for('register') }}">Register</a></p>
             {% else %}
             <div class="header-block1">
-                <a href="{{ url_for('my_communities', name=current_user.name) }}" style = "margin-bottom: 0px;" class="game-price">My Communities </a>
 
                 <a class="game-price" style = "margin-bottom: 0px;">{{current_user.balance}} </a>
                 <a href="{{ url_for('deposit', user_name=current_user.name) }}" >
@@ -59,7 +58,7 @@
 
 		</div>
 	</header>
-    <nav class="nav-wrap">
+    <nav class="nav-wrap" style="padding-top: 180px;">
 		<ul>
 			<li>
 				<a href="{{ url_for('home') }}">
@@ -76,11 +75,6 @@
             <li>
                 <a href="{{ url_for('my_games', name=current_user.name) }}" class="my_games">
                     <img src="{{ url_for('static',filename='img/icons/games.svg')}}"  alt="">
-                </a>
-            </li>
-            <li>
-                <a href="{{ url_for('communities') }}" class="communities">
-                    <img src="{{ url_for('static',filename='img/icons/user.svg')}}"  alt="">
                 </a>
             </li>
             {% endif %}
