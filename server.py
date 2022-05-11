@@ -54,22 +54,23 @@ connex_app.add_api("swagger.yml")
 
 @app.route("/")
 def home():
-    """
-    This function just responds to the browser URL
-    localhost:5000/
-    :return:        the rendered template "home.html"
-    """
-    return render_template("home.html")
+    db_games = Game.query.order_by(Game.name).all()
+    db_games_user = UserGame.query.all()
+    list_games_stats = []
+    max_count = 0
+    most_pop_game = Game.query.filter(Game.id == 1).one_or_none()
+    for game in db_games:
+        id = game.id
+        name = game.name
+        count = 0
+        for con in db_games_user:
+            if con.game_id == id:
+                count += 1
+        if max_count < count:
+            most_pop_game = game
+            max_count = count
+    return render_template("home.html", game=most_pop_game)
 
-
-@app.route("/home")
-def home1():
-    """
-    This function just responds to the browser URL
-    localhost:5000/
-    :return:        the rendered template "home.html"
-    """
-    return render_template("home.html")
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -143,6 +144,18 @@ def catalog():
         data = {"id": id, "name": name, "price": price, "genre": genre, "point": point, "pic_path": pic_path}
         list_games.append(data)
     return render_template('catalog.html', games=list_games)
+
+
+@app.route('/page_game/<game_id>')
+def page_game(game_id):
+    game = Game.query.filter(Game.id == game_id).one_or_none()
+    name = game.name
+    price = game.price
+    genre = Genre.query.filter(Genre.id == game.genre_id).one_or_none().name
+    point = game.point
+    pic_path = game.pic_path
+    data = {"id": id, "name": name, "price": price, "genre": genre, "point": point, "pic_path": pic_path}
+    return render_template('page_game.html', game=data)
 
 
 @app.route('/edit/<user_id>', methods=['GET', 'POST'])

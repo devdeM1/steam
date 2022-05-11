@@ -345,8 +345,10 @@ li.current a {
 }
 
 .game-photo img {
-  height: 100%;
+  height: 500px;
+  width: 350px;
 }
+
 
 .game-info {
   max-width: 396px;
@@ -602,9 +604,18 @@ li.current a {
   }
 
   .game-photo__order {
-    width: 496px;
-    height: 250px;
+    width: 500px;
+    height: 800px;
   }
+  
+.main_img{
+	width: 100%;
+	height: auto;
+}
+.mainphoto{
+    width: 500px;
+    height: 800px;
+}
 
   .game-info__order {
     max-width: 496px;

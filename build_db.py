@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash
 # Data to initialize database with
 GAMES = [
     {"name": "Dota 2", "price": 0, "genre": "Strategy", "point": 5},
-    {"name": "Hearthstone", "price": 7, "genre": "Strategy"},
+    {"name": "Hearthstone", "price": 7, "genre": "Strategy", "point": 9, "text": "Kоллекционная карточная онлайн-игра по мотивам вселенной Warcraft, разработанная компанией Blizzard Entertainment и распространяемая по модели free-to-play. Игра была выпущена для персональных компьютеров 11 марта 2014 года."},
     {"name": "ELDEN RING", "price": 35, "genre": "RPG", "point": 9},
     {"name": "Rogue Legacy 2", "price": 10, "genre": "Indie", "point": 8},
     {"name": "NARAKA: BLADEPOINT", "price": 10, "genre": "PvP", "point": 7},
@@ -60,7 +60,7 @@ GAMES = [
     {"name": "Atelier Ryza: Ever Darkness & the Secret Hideout", "price": 14, "genre": "Anime", "point": 7 ,"pic_path": "Atelier Ryza: Ever Darkness & the Secret Hideout"},
     {"name": "Farming Simulator 22", "price": 35, "genre": "Co-op", "point": 9},
     {"name": "Enter the Gungeon", "price": 4, "genre": "Roguelike", "point": 9},
-    {"name": "Danganronpa 1/2/V3", "price": 13, "genre": "Adventure", "point": 7, "pic_path": "Danganronpa"},
+    {"name": "Danganronpa", "price": 13, "genre": "Adventure", "point": 7, "pic_path": "Danganronpa"},
     {"name": "Satisfactory", "price": 15, "genre": "Crafting", "point": 9},
     {"name": "World War 3", "price": 8, "genre": "Modern", "point": 7},
     {"name": "Death's Door", "price": 8, "genre": "RPG", "point": 9},
@@ -389,7 +389,8 @@ for game in GAMES:
         price=game.get("price"),
         genre_id=genre.id,
         point=game.get("point"),
-        pic_path=game.get("pic_path")
+        pic_path=game.get("name"),
+        text=game.get("text")
     )
     db.session.add(p)
 

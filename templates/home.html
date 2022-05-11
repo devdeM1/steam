@@ -1,2 +1,23 @@
 {% extends "base.html" %}
+{% block content %}
+<h2 class="home-title">Лидер продаж</h2>
+    <section class="content">
+		<div class="game-card game-card__order game-home">
+			<div class="game-card__order">
+				<a href="{{ url_for('page_game', game_id=game.id) }}" >
+					<div class="main_img">
+						<img src="{{ url_for('static',filename='img/catalog/{}'.format(game.pic_path)) }}" style="width: 100%;height: auto;" alt="">
+					</div>
+			</div>
+			<div class="game-info game-info__order">
+				<a href="#" class="btn-filter">НОВИНКА</a>
+				<h2>{{game.name}}</h2>
+				<p>{{game.text}}</p>
+				<div class="game-price">
+					<span>${{game.price}}</span><a target="_blank" href="{{ url_for('page_game', game_id=game.id) }}" class="btn-cart">Заказать</a>
+				</div>
+			</div>
+		</div>
+	</section>
 
+{% endblock %}
