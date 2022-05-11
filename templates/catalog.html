@@ -2,29 +2,21 @@
 
 {% block content %}
     <hr>
-    Catalog:
-    {% for game in games %}
-    <p>
-        <b> Game:{{ game.name }}
-            Price:{{ game.price }}
-            genre:{{ game.genre }}
-            point:{{ game.point }}
-        </b>
-    </p>
 	<section class="content">
-		<a href="" class="game-card game-card__big">
-			<div class="game-photo game-photo__bg">
-				<img src="{{url_for('static',filename='img/catalog/')}}" alt="">
-			</div>
-			<div class="game-info">
-				<h4>{{game.name}}</h4>
-				<span class="game-genre">{{game.genre}}</span>
-				<div class="game-price"><span>$ {{game.price}}</span>
+		{% for game in games %}
+			<a href="" class="game-card game-card__big">
+				<div class="game-photo game-photo__bg">
+					<img src="{{ url_for('static',filename='img/catalog/{}'.format(game.pic_path)) }}" alt="">
 				</div>
-			</div>
-		</a>
+				<div class="game-info">
+					<h4>{{game.name}}</h4>
+					<span class="game-genre">{{game.genre}}</span>
+					<div class="game-price"><span>$ {{game.price}}</span>
+					</div>
+				</div>
+			</a>
+		{% endfor %}
 	</section>
-    {% endfor %}
 {% endblock %}
 {% block scripts %}
 <script src="{{ url_for('static',filename='js/script.js') }}"></script>

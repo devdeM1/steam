@@ -75,7 +75,7 @@ def home1():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('home'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(name=form.name.data).first()
@@ -139,10 +139,10 @@ def catalog():
         price = game.price
         genre = Genre.query.filter(Genre.id == game.genre_id).one_or_none().name
         point = game.point
-        pic = game.pic
-        data = {"id": id, "name": name, "price": price, "genre": genre, "point": point}
+        pic_path = game.pic_path
+        data = {"id": id, "name": name, "price": price, "genre": genre, "point": point, "pic_path": pic_path}
         list_games.append(data)
-    return render_template('catalog.html',  game_img='7days', games=list_games)
+    return render_template('catalog.html', games=list_games)
 
 
 @app.route('/edit/<user_id>', methods=['GET', 'POST'])
@@ -226,6 +226,71 @@ def my_communities(name):
             }
             list_communities.append(data)
         return render_template('my_communities.html', title=' My Communities', communities=list_communities)
+
+
+@app.route('/communities')
+def communities():
+    db_community = Community.query.order_by(Community.name).all()
+    list_community = []
+    for community in db_community:
+        db_community_user = CommunityUser.query.filter(CommunityUser.community_id == community.id).all()
+        count = 0
+        for i in db_community_user:
+            count = count+1
+        name = community.name
+        data = {"name": name, "count": count
+                }
+        list_community.append(data)
+    print(list_community)
+    return render_template('communities.html', communities=list_community)
+
+
+@app.route('/community/<community_name>')
+@login_required
+def community(community_name):
+    comm = Community.query.filter(Community.name == community_name).one_or_none()
+    db_comm_users = CommunityUser.query.filter(CommunityUser.community_id == comm.id).all()
+    list_users = []
+    for i in db_comm_users:
+        user = User.query.filter(
+            User.id == i.game_id
+        ).one_or_none()
+        name = user.name
+        data = {
+            "name": name,
+        }
+        list_users.append(data)
+    return render_template('community.html', users=list_users, comm=comm)
+
+
+@app.route('/join_community')
+@login_required
+def join_community(community_name, user_id):
+    user = User.query.filter(
+        User.user_id == user_id
+    ).one_or_none()
+
+    if user is None:
+        # User not exist
+        flash(
+            "User {0} not exist"
+        )
+
+    community = Community.query.filter(
+        Community.name == community_name
+    ).one_or_none()
+
+    if community is None:
+        # User not exist
+        flash(
+            "Community {0} not exist"
+        )
+    new_user_community = CommunityUser()
+    new_user_community.user_id = user.user_id
+    new_user_community.community_id = community.id
+    db.session.add(new_user_community)
+    db.session.commit()
+    return render_template('communities.html')
 
 
 if __name__ == "__main__":

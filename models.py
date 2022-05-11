@@ -23,7 +23,7 @@ class Game(db.Model):
     genre_id = db.Column(db.Integer, ForeignKey('table_genre.id'))
     point = db.Column(db.Integer)
     genre = relationship("Genre")
-    pic = db.Column(db.String(128))
+    pic_path = db.Column(db.String(128), nullable=True)
     # Добавить поле ограничение возраста
 
 

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<hr>
+    Communities:
+    {% for comm in communities %}
+    <p>
+
+        <a href="{{ url_for('community', name={{comm.name}}) }}" class="game-card game-card__big">
+			<img src="" alt="">
+			<div class="game-info">
+				<h4>{{comm.name}}</h4>
+				<div class="game-price"><span> {{comm.count}}</span>
+				</div>
+			</div>
+
+		</a>
+	</p>
+    {% endfor %}
+{% endblock %}

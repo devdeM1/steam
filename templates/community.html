@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<hr>
+    comm.name
+    <a href="{{ url_for('join_community',user_id=current_user.user_id, community_name=comm.name) }}">Join</a>
+    {% for user in users %}
+    <p>
+        <b>{{ user.name }}</b>
+    </p>
+    {% endfor %}
+
+{% endblock %}

@@ -7,7 +7,6 @@ from werkzeug.security import generate_password_hash
 # Data to initialize database with
 GAMES = [
     {"name": "Dota 2", "price": 0, "genre": "Strategy", "point": 5},
-    {"name": "CS", "price": 10, "genre": "Shooter", "point": 5},
     {"name": "Hearthstone", "price": 7, "genre": "Strategy"},
     {"name": "ELDEN RING", "price": 35, "genre": "RPG", "point": 9},
     {"name": "Rogue Legacy 2", "price": 10, "genre": "Indie", "point": 8},
@@ -38,7 +37,7 @@ GAMES = [
     {"name": "Stardew Valley", "price": 10, "genre": "RPG", "point": 10},
     {"name": "Project Hospital Collection", "price": 13, "genre": "Strategy", "point": 8},
     {"name": "Ready or Not", "price": 25, "genre": "Tactical", "point": 9},
-    {"name": "ARK: Ultimate Survivor Edition", "price": 32, "genre": "RPG", "point": 7},
+    {"name": "ARK: Ultimate Survivor Edition", "price": 32, "genre": "RPG", "point": 7, "pic_path": "ARK: Ultimate Survivor Edition"},
     {"name": "Escape Simulator", "price": 7, "genre": "Puzzle", "point": 9},
     {"name": "God of War", "price": 40, "genre": "Combat", "point": 10},
     {"name": "Project Zomboid", "price": 11, "genre": "Zombies", "point": 9},
@@ -55,45 +54,43 @@ GAMES = [
     {"name": "No Man's Sky", "price": 35, "genre": "Space", "point": 8},
     {"name": "JUNKPUNK", "price": 6, "genre": "Building", "point": 7},
     {"name": "Wildermyth", "price": 9, "genre": "Choices Matter", "point": 9},
-    {"name": "Core Keeper", "price": 8, "genre": "2D", "point": 9},
-    {"name": "Cultivation Tales", "price": 11, "genre": "Sandbox", "point": 3},
+    {"name": "Core Keeper", "price": 8, "genre": "2D", "point": 9, "pic_path": "Core Keeper"},
+    {"name": "Cultivation Tales", "price": 11, "genre": "Sandbox", "point": 3, "pic_path":"Cultivation Tales"},
     {"name": "Pummel Party", "price": 8, "genre": "Co-op", "point": 9},
-    {"name": "Atelier Ryza: Ever Darkness & the Secret Hideout", "price": 14, "genre": "Anime", "point": 7},
+    {"name": "Atelier Ryza: Ever Darkness & the Secret Hideout", "price": 14, "genre": "Anime", "point": 7 ,"pic_path": "Atelier Ryza: Ever Darkness & the Secret Hideout"},
     {"name": "Farming Simulator 22", "price": 35, "genre": "Co-op", "point": 9},
     {"name": "Enter the Gungeon", "price": 4, "genre": "Roguelike", "point": 9},
-    {"name": "Danganronpa 1/2/V3", "price": 13, "genre": "Adventure", "point": 7},
+    {"name": "Danganronpa 1/2/V3", "price": 13, "genre": "Adventure", "point": 7, "pic_path": "Danganronpa"},
     {"name": "Satisfactory", "price": 15, "genre": "Crafting", "point": 9},
     {"name": "World War 3", "price": 8, "genre": "Modern", "point": 7},
     {"name": "Death's Door", "price": 8, "genre": "RPG", "point": 9},
     {"name": "Factorio", "price": 12, "genre": "Crafting", "point": 9},
-    {"name": "Attack on Titan 2: Final Battle", "price": 15, "genre": "Action", "point": 7},
-    {"name": "Barotrauma", "price": 3, "genre": "Submarine", "point": 9},
+    {"name": "Barotrauma", "price": 3, "genre": "Submarine", "point": 9, "pic_path":"Barotrauma"},
     {"name": "Risk of Rain 2: Survivors of the Void", "price": 8, "genre": "Co-op", "point": 8},
     {"name": "Nioh: Complete Edition", "price": 6, "genre": "Ninja", "point": 7},
     {"name": "Fall Guys: Ultimate Knockout", "price": 11, "genre": "PvP", "point": 7},
-    {"name": "BeamNG.drive", "price": 13, "genre": "Driving", "point": 9},
+    {"name": "BeamNG.drive", "price": 13, "genre": "Driving", "point": 9, "pic_path":"BeamNG.drive"},
     {"name": "Hades", "price": 13, "genre": "Mythology", "point": 9},
     {"name": "Don't Starve Together", "price": 8, "genre": "Crafting", "point": 9},
-    {"name": "Car Mechanic Simulator 2021", "price": 10, "genre": "Driving", "point": 9},
+    {"name": "Car Mechanic Simulator 2021", "price": 10, "genre": "Driving", "point": 9, "pic_path": "Car Mechanic Simulator 2021"},
     {"name": "Skul: The Hero Slayer", "price": 7, "genre": "2D", "point": 9},
-    {"name": "Children of Morta: Complete Edition", "price": 4, "genre": "RPG", "point": 7},
-    {"name": "7 Days to Die", "price": 15, "genre": "Open World", "point": 8},
+    {"name": "7 Days to Die", "price": 15, "genre": "Open World", "point": 8, 'pic_path': "7days"},
     {"name": "WARRIORS OROCHI 4 Ultimate Deluxe Edition", "price": 20, "genre": "Action", "point": 7},
     {"name": "WorldBox - God Simulator", "price": 10, "genre": "Sandbox", "point": 9},
     {"name": "Mount & Blade II: Bannerlord", "price": 30, "genre": "Action", "point": 9},
-    {"name": "Beat Saber", "price": 15, "genre": "Moddable", "point": 9},
+    {"name": "Beat Saber", "price": 15, "genre": "Moddable", "point": 9,'pic_path':"Beat Saber"},
     {"name": "Kingdom Two Crowns", "price": 2, "genre": "Indie", "point": 9},
     {"name": "Euro Truck Simulator 2 - Iberia", "price": 10, "genre": "Indie", "point": 7},
     {"name": "Sable", "price": 8, "genre": "Indie", "point": 9},
     {"name": "TEKKEN 7", "price": 10, "genre": "Arcade", "point": 7},
-    {"name": "Bounty game", "price": 8, "genre": "Action", "point": 8},
+    {"name": "Bounty game", "price": 8, "genre": "Action", "point": 8, "pic_path": "Bounty game"},
     {"name": "Inscryption", "price": 13, "genre": "Adventure", "point": 10},
     {"name": "SCUM", "price": 16, "genre": "Zombies", "point": 8},
-    {"name": "DayZ", "price": 45, "genre": "Zombies", "point": 9},
+    {"name": "DayZ", "price": 45, "genre": "Zombies", "point": 9, "pic_path": "DayZ"},
     {"name": "Teardown", "price": 11, "genre": "Voxel", "point": 9},
     {"name": "Stacklands", "price": 3, "genre": "Card Battler", "point": 9},
     {"name": "Garry's Mod", "price": 7, "genre": "Co-op", "point": 10},
-    {"name": "Acquitted", "price": 3, "genre": "Shooter", "point": 10},
+    {"name": "Acquitted", "price": 3, "genre": "Shooter", "point": 10, "pic_path": "acquitted"},
     {"name": "UBOAT", "price": 15, "genre": "War", "point": 8},
     {"name": "Witch It", "price": 3, "genre": "Indie", "point": 8},
     {"name": "Underdog Detective-Episode 6 to 17", "price": 11, "genre": "RPG", "point": 5},
@@ -102,8 +99,8 @@ GAMES = [
     {"name": "Mirror 2: Project X Bundle", "price": 5, "genre": "RPG", "point": 7},
     {"name": "Streets of Rogue", "price": 4, "genre": "Action", "point": 10},
     {"name": "Unrailed!", "price": 3, "genre": "Co-op", "point": 9},
-    {"name": "Bloons TD 6", "price": 6, "genre": "Co-op", "point": 10},
-    {"name": "DARK SOULS™: REMASTERED", "price": 40, "genre": "RPG", "point": 8},
+    {"name": "Bloons TD 6", "price": 6, "genre": "Co-op", "point": 10, "pic_path": "Bloons TD 6"},
+    {"name": "DARK SOULS™: REMASTERED", "price": 40, "genre": "RPG", "point": 8, "pic_path":"DARK SOULS : REMASTERED"},
     {"name": "Subnautica", "price": 1, "genre": "Survival", "point": 10},
     {"name": "Metal Mind", "price": 8, "genre": "Roguelite", "point": 8},
 ]
@@ -210,7 +207,6 @@ USERS = [
 ]
 
 USERS_GAMES = [
-    {"game_name": "CS", "user_name": "Dima"},
     {"game_name": "Hearthstone", "user_name": "Maks"},
     {"game_name": "Dota 2", "user_name": "Dima"},
     {"game_name": "Hearthstone", "user_name": "Dima"},
@@ -371,7 +367,6 @@ COMMUNITY_USER = [
 
 COMMUNITY_GAME = [
     {"community_name": "Party 12 vs 12 Doka 2", "game_name": "Dota 2"},
-    {"community_name": "Party 12 vs 12 Doka 2", "game_name": "CS"},
     {"community_name": "easy-peasy, lemon squeezy", "game_name": "Hearthstone"},
 ]
 
@@ -393,7 +388,8 @@ for game in GAMES:
         name=game.get("name"),
         price=game.get("price"),
         genre_id=genre.id,
-        point=game.get("point")
+        point=game.get("point"),
+        pic_path=game.get("pic_path")
     )
     db.session.add(p)
 
