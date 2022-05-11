@@ -58,16 +58,24 @@
 					<img src="{{ url_for('static',filename='img/icons/home-run.svg')}}"  alt="">
 				</a>
 			</li>
-			<li class="current">
+			<li>
 				<a href="{{ url_for('catalog') }}">
 					<img src="{{ url_for('static',filename='img/icons/shop.svg')}}"  alt="">
 				</a>
 			</li>
+            {% if current_user.is_anonymous %}
+            {% else %}
             <li>
                 <a href="{{ url_for('my_games', name=current_user.name) }}" class="my_games">
-                    <img class="login" src="{{ url_for('static',filename='img/icons/games.svg')}}"  alt="">
+                    <img src="{{ url_for('static',filename='img/icons/games.svg')}}"  alt="">
                 </a>
             </li>
+            <li>
+                <a href="{{ url_for('my_communities', name=current_user.name) }}" class="my_communities">
+                    <img src="{{ url_for('static',filename='img/icons/user.svg')}}"  alt="">
+                </a>
+            </li>
+            {% endif %}
 		</ul>
 	</nav>
 </html>

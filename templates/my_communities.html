@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<hr>
+    Your communities:
+    {% for comm in communities %}
+    <p>
+        <b>{{ comm.name }}</b>
+    </p>
+    {% endfor %}
+{% endblock %}

@@ -6,7 +6,7 @@ Main module of the server file
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from forms import LoginForm, RegistrationForm, EditForm
-from models import User, Game, UserGame, Genre
+from models import User, Game, UserGame, Genre, CommunityUser, Community
 from flask_admin import Admin
 from config import db, app
 from flask_admin.contrib.sqla import ModelView
@@ -139,9 +139,10 @@ def catalog():
         price = game.price
         genre = Genre.query.filter(Genre.id == game.genre_id).one_or_none().name
         point = game.point
+        pic = game.pic
         data = {"id": id, "name": name, "price": price, "genre": genre, "point": point}
         list_games.append(data)
-    return render_template('catalog.html', title='Hello everybody' ,games=list_games)
+    return render_template('catalog.html',  game_img='7days', games=list_games)
 
 
 @app.route('/edit/<user_id>', methods=['GET', 'POST'])
@@ -150,13 +151,6 @@ def edit(user_id):
     form = EditForm()
     print('USER ID: ', user_id)
     if form.validate_on_submit():
-        new_user = User(name=form.name.data,
-                        second_name=form.second_name.data,
-                        country=form.country.data,
-                        sex=form.sex.data,
-                        email=form.email.data,
-                        phone_number=form.phone_number.data,
-                        )
         existing_user = (
             User.query.filter(User.name == form.name.data)
                 .filter(User.second_name == form.second_name.data)
@@ -171,9 +165,7 @@ def edit(user_id):
             flash('This user already exist!')
             return render_template('edit.html', form=form)
         else:
-            print('JOIN in else')
             update_user = User.query.filter(User.user_id == user_id).one_or_none()
-            print('UPDATE USER:', update_user)
             update_user.name = form.name.data
             update_user.second_name = form.second_name.data
             update_user.country = form.country.data
@@ -183,7 +175,15 @@ def edit(user_id):
             db.session.commit()
             flash('Congratulations, you are now a edit your profile!')
             return redirect(url_for('user', name=update_user.name))
-    return render_template('edit.html', form=form)
+    elif request.method == 'GET':
+        form.name.data = current_user.name
+        form.second_name.data = current_user.second_name
+        form.country.data = current_user.country
+        form.email.data = current_user.email
+        form.sex.data = current_user.sex
+        form.phone_number.data = current_user.phone_number
+
+    return render_template('edit.html', title='Edit Profile', form=form)
 
 
 @app.route('/<name>/my_games', methods=['GET', 'POST'])
@@ -204,6 +204,29 @@ def my_games(name):
         }
         list_games.append(data)
     return render_template('my_games.html', games=list_games)
+
+
+@app.route('/<name>/my_communities', methods=['GET', 'POST'])
+@login_required
+def my_communities(name):
+    user = User.query.filter_by(name=name).first_or_404()
+    if user is None:
+        # User not exist
+        flash("User  not exist")
+    else:
+        db_communities = CommunityUser.query.filter(CommunityUser.user_id == user.user_id).all()
+        list_communities = []
+        for community in db_communities:
+            community_for_output = Community.query.filter(
+                Community.id == community.community_id
+            ).one_or_none()
+            name = community_for_output.name
+            data = {
+                "name": name,
+            }
+            list_communities.append(data)
+        return render_template('my_communities.html', title=' My Communities', communities=list_communities)
+
 
 if __name__ == "__main__":
     connex_app.run(debug=True)

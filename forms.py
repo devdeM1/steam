@@ -2,7 +2,7 @@
 from models import User
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 
 
 class LoginForm(FlaskForm):
@@ -33,9 +33,9 @@ class RegistrationForm(FlaskForm):
 
 class EditForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
-    second_name = StringField('Second Name', validators=[DataRequired()])
-    country = StringField('Country', validators=[DataRequired()])
-    sex = StringField('Sex', validators=[DataRequired()])
+    second_name = StringField('Second Name', validators=[Length(min=0, max=32)])
+    country = StringField('Country', validators=[Length(min=0, max=32)])
+    sex = StringField('Sex', validators=[Length(min=0, max=32)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    phone_number = StringField('Sex', validators=[DataRequired()])
+    phone_number = StringField('Sex', validators=[Length(min=0, max=13)])
     submit = SubmitField('Submit')
