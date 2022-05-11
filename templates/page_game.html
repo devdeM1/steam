@@ -8,7 +8,9 @@
             <img src="{{ url_for('static',filename='img/catalog/{}'.format(game.pic_path)) }}" alt="">
         </div>
         <div class="game-info game-info__order">
+            {% if  flag%}
             <a href="#" class="btn-filter">НОВИНКА</a>
+            {% endif %}
             <h2 class="game-page-name">{{game.name}}</h2>
             <ul>
                 <li>Категория: <span>{{game.genre}}</span></li>

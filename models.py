@@ -3,6 +3,7 @@ from config import db, ma, app
 from sqlalchemy import Table, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin
+from datetime import datetime
 
 import os
 from flask import Flask, url_for, redirect, render_template, request
@@ -25,10 +26,19 @@ class Game(db.Model):
     genre = relationship("Genre")
     pic_path = db.Column(db.String(128), nullable=True)
     text = db.Column(db.String(5000), nullable=True)
-    date = db.Column(db.String(10),nullable=True)
+    date = db.Column(db.Date, nullable=True)
     developer = db.Column(db.String(128), nullable=True)
     platform = db.Column(db.String(128), nullable=True)
     # Добавить поле ограничение возраста
+
+    def check_year(self):
+        flag = False
+        print(datetime.now().year - 3)
+        if self.date.year >= datetime.now().year - 3:
+            flag = True
+            return flag
+        else:
+            return flag
 
 
 class User(UserMixin, db.Model):
@@ -55,6 +65,8 @@ class User(UserMixin, db.Model):
 
     def get_id(self):
         return str(self.user_id)
+
+
 
 
 '''   # Flask-Login integration

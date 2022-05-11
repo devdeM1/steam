@@ -186,7 +186,11 @@ def page_game(game_id):
                 "developer": game.developer,
                 "date": game.date,
                 "platform": game.platform}
-        return render_template('page_game.html', game=data)
+        try:
+            flag = Game.check_year(game)
+        except:
+            flag = False
+        return render_template('page_game.html', game=data, flag=flag)
 
 
 @app.route('/edit/<user_id>', methods=['GET', 'POST'])
