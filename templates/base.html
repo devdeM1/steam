@@ -41,12 +41,19 @@
                 <a href="{{ url_for('login') }}">Login</a>
                 <p><a href="{{ url_for('register') }}">Register</a></p>
             {% else %}
-                <a href="{{ url_for('my_communities', name=current_user.name) }}" class="game-price">My Communities </a>
-                <a href="{{ url_for('logout') }}" class="game-price">Logout</a>
+            <div class="header-block1">
+                <a href="{{ url_for('my_communities', name=current_user.name) }}" style = "margin-bottom: 0px;" class="game-price">My Communities </a>
+
+                <a class="game-price" style = "margin-bottom: 0px;">{{current_user.balance}} </a>
+                <a href="{{ url_for('deposit', user_name=current_user.name) }}" >
+					<img src="{{ url_for('static',filename='img/icons/+.png')}}" style="margin-bottom: 0px;width: 25;" class="game-price" alt="">
+				</a>
+
                 <a href="{{ url_for('user', name=current_user.name) }}" class="user">
 				    <img class="login" src="{{ url_for('static',filename='img/icons/user.svg')}}" alt="">
 			    </a>
-
+            <a href="{{ url_for('logout') }}" class="game-price" style = "margin-bottom: 0px;">Logout</a>
+            </div>
              {% endif %}
 
 

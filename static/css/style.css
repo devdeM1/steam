@@ -45,6 +45,20 @@ body {
   align-items: center;
 }
 
+.header-block1 {
+  width: 100%;
+  padding: 19px 10px 21px 330px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
 .logo {
   display: -webkit-box;
   display: -ms-flexbox;

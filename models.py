@@ -34,7 +34,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(32))
     second_name = db.Column(db.String(32))
     date = db.Column(db.String(32))
-    balance = db.Column(db.Integer)
+    balance = db.Column(db.Integer, default=0)
     country = db.Column(db.String(32))
     sex = db.Column(db.String(32))
     email = db.Column(db.String(120))
