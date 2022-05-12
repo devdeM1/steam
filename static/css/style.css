@@ -363,6 +363,9 @@ li.current a {
   width: 350px;
 }
 
+.footer-icon{
+	width: 25;
+}
 
 .game-info {
   max-width: 396px;

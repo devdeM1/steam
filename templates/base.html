@@ -1,88 +1,104 @@
 <html>
-    <head>
-        {% if title %}
-        <title>{{ title }} - GG</title>
+<head>
+    {% if title %}
+    <title>{{ title }} - GG</title>
+    {% else %}
+    <title>GG</title>
+    {% endif %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GG - покупай и играй!</title>
+    <link rel="icon" sizes="32x32" href="static/img/icons/gg.png"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+</head>
+<body>
+<hr>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% block content %}{% endblock %}
+{% block scripts %}{% endblock %}
+</body>
+<header class="header">
+    <a href="{{ url_for('home') }}" class="logo">
+        <img width="64" height="64" src="{{ url_for('static',filename='img/icons/gg.png')}}" alt="GG">
+    </a>
+    <div class="header-block">
+        <div class="search"><input type="search" name="" id="" placeholder="Find a game">
+            <img src="{{ url_for('static',filename='img/icons/search.svg')}}" alt="">
+
+        </div>
+        <img src="{{ url_for('static',filename='img/icons/enter')}}" style="width: 25;" alt="">
+        {% if current_user.is_anonymous %}
+        <a href="{{ url_for('login') }}">Login</a>
+        <p><a href="{{ url_for('register') }}">Register</a></p>
         {% else %}
-        <title>GG</title>
+        <div class="header-block1">
+
+            <a class="game-price" style="margin-bottom: 0px;">{{current_user.balance}} </a>
+            <a href="{{ url_for('deposit', user_name=current_user.name) }}">
+                <img src="{{ url_for('static',filename='img/icons/+.png')}}" style="margin-bottom: 0px;width: 25;"
+                     class="game-price" alt="">
+            </a>
+
+            <a href="{{ url_for('user', name=current_user.name) }}" class="user">
+                <img class="login" src="{{ url_for('static',filename='img/icons/user.svg')}}" alt="">
+            </a>
+            <a href="{{ url_for('logout') }}" class="game-price" style="margin-bottom: 0px;">Logout</a>
+        </div>
         {% endif %}
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>GG - покупай и играй!</title>
-        <link rel="icon" sizes="32x32" href="static/img/icons/gg.png"/>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
-    </head>
-    <body>
-        <hr>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
+
+
+    </div>
+</header>
+<nav class="nav-wrap" style="padding-top: 180px;">
+    <ul>
+        <li>
+            <a href="{{ url_for('home') }}">
+                <img src="{{ url_for('static',filename='img/icons/home-run.svg')}}" alt="">
+            </a>
+        </li>
+        <li>
+            <a href="{{ url_for('catalog') }}">
+                <img src="{{ url_for('static',filename='img/icons/shop.svg')}}" alt="">
+            </a>
+        </li>
+        {% if current_user.is_anonymous %}
+        {% else %}
+        <li>
+            <a href="{{ url_for('my_games', name=current_user.name) }}" class="my_games">
+                <img src="{{ url_for('static',filename='img/icons/games.svg')}}" alt="">
+            </a>
+        </li>
         {% endif %}
-        {% endwith %}
-        {% block content %}{% endblock %}
-    {% block scripts %}{% endblock %}
-    </body>
-    <header class="header">
-			<a href="{{ url_for('home') }}" class="logo">
-				<img width="64" height="64" src="{{ url_for('static',filename='img/icons/gg.png')}}"  alt="GG">
-			</a>
-		<div class="header-block">
-			<div class="search"><input type="search" name="" id="" placeholder="Find a game">
-			<img src="{{ url_for('static',filename='img/icons/search.svg')}}"  alt="">
-			</div>
-            {% if current_user.is_anonymous %}
-                <a href="{{ url_for('login') }}">Login</a>
-                <p><a href="{{ url_for('register') }}">Register</a></p>
-            {% else %}
-            <div class="header-block1">
 
-                <a class="game-price" style = "margin-bottom: 0px;">{{current_user.balance}} </a>
-                <a href="{{ url_for('deposit', user_name=current_user.name) }}" >
-					<img src="{{ url_for('static',filename='img/icons/+.png')}}" style="margin-bottom: 0px;width: 25;" class="game-price" alt="">
-				</a>
-
-                <a href="{{ url_for('user', name=current_user.name) }}" class="user">
-				    <img class="login" src="{{ url_for('static',filename='img/icons/user.svg')}}" alt="">
-			    </a>
-            <a href="{{ url_for('logout') }}" class="game-price" style = "margin-bottom: 0px;">Logout</a>
-            </div>
-             {% endif %}
+        >
+    </ul>
 
 
-		</div>
-	</header>
-    <nav class="nav-wrap" style="padding-top: 180px;">
-		<ul>
-			<li>
-				<a href="{{ url_for('home') }}">
-					<img src="{{ url_for('static',filename='img/icons/home-run.svg')}}"  alt="">
-				</a>
-			</li>
-			<li>
-				<a href="{{ url_for('catalog') }}">
-					<img src="{{ url_for('static',filename='img/icons/shop.svg')}}"  alt="">
-				</a>
-			</li>
-            {% if current_user.is_anonymous %}
-            {% else %}
-            <li>
-                <a href="{{ url_for('my_games', name=current_user.name) }}" class="my_games">
-                    <img src="{{ url_for('static',filename='img/icons/games.svg')}}"  alt="">
-                </a>
-            </li>
-            {% endif %}
-		</ul>
-	</nav>
+    <p style="border-top-width: 0px;border-top-style: solid;margin-top: 110px;">
+        <a href="https://vk.com/devdem1" class="footer-icon">
+            <img src="/static/img/icons/vk" style="width: 35;" alt="">
+        </a>
 
-    <footer>
-        <p>
-            <a href = "https://vk.com/devdem1">Maksim Medvedev</a>   +375447367013    © 2022  GG     makd1232255@yandex.ru     </p>
-    </footer>
+        <a href="https://vk.com/devdem1" class="footer-icon">
+            <img src="/static/img/icons/facebook" style="width: 32;" alt=""> </a>
+
+        <a href="https://vk.com/devdem1" class="footer-icon">
+            <img src="/static/img/icons/twitter" style="width: 32;" alt="">
+        </a>
+        <a href="https://vk.com/devdem1" class="footer-icon">
+            <img src="/static/img/icons/instagram" style="width: 32;" alt=""></a>
+</p>
+</nav>
 </html>
