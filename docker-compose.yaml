@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  server:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    depends_on:
+      - db
+    ports:
+      - 5001:5000
+
+  db:
+    image: postgres:13.3
+    volumes:
+      - ./entrypoints:/docker-entrypoint-initdb.d
+      - pgdata:/var/lib/postgresql/data
+    environment: 
+      - POSTGRES_USER=docker
+      - POSTGRES_DB=docker
+      - POSTGRES_PASSWORD=docker!
+      - POSTGRES_APP_HOST=db
+      - POSTGRES_APP_PORT=5432
+      - POSTGRES_APP_USER=user_postgres
+      - POSTGRES_APP_DB=user_postgres
+      - POSTGRES_APP_PASSWORD=qwerty123255
+    ports:
+      - 5432:5432
+
+volumes:
+  pgdata:
