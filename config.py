@@ -15,7 +15,7 @@ app = connex_app.app
 
 
 # Build the Sqlite ULR for SqlAlchemy
-database_url = "postgresql+psycopg2://user_postgres:qwerty123255@localhost:5432/user_postgres"
+database_url = "postgresql+psycopg2://user_postgres:qwerty123255@db:5432/user_postgres"
 
 # Configure the SqlAlchemy part of the app instance
 app.config["SQLALCHEMY_ECHO"] = False

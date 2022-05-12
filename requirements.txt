@@ -8,3 +8,5 @@ Flask-WTF==1.0.1
 email-validator==1.2.1
 Flask-BasicAuth==0.2.0
 fpdf==1.7.2
+psycopg2==2.9.3
+

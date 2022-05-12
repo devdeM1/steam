@@ -9,6 +9,17 @@ services:
       - db
     ports:
       - 5001:5000
+    volumes:
+      - ./:/app/
+  migration:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    depends_on:
+      - db
+    volumes:
+      - ./:/app/
+    command: "python3 build_db.py"
 
   db:
     image: postgres:13.3
@@ -25,7 +36,7 @@ services:
       - POSTGRES_APP_DB=user_postgres
       - POSTGRES_APP_PASSWORD=qwerty123255
     ports:
-      - 5432:5432
+      - 5433:5432
 
 volumes:
   pgdata:
