@@ -5,7 +5,7 @@ Main module of the server file
 # 3rd party moudles
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
-from forms import LoginForm, RegistrationForm, EditForm
+from forms import LoginForm, RegistrationForm, EditForm, SearchForm
 from models import User, Game, UserGame, Genre, CommunityUser, Community
 from flask_admin import Admin
 from config import db, app
@@ -13,6 +13,8 @@ from flask_admin.contrib.sqla import ModelView
 from flask_basicauth import BasicAuth
 from werkzeug.urls import url_parse
 import flask_admin as admin
+from flask_admin.contrib import sqla
+from fpdf import FPDF
 '''from models import MyAdminIndexView'''
 
 # local modules
@@ -29,7 +31,7 @@ login.login_view = 'login'
 def load_user(id):
     return User.query.get(int(id))
 
-'''
+
 basic_auth = BasicAuth(app)
 
 
@@ -37,19 +39,30 @@ basic_auth = BasicAuth(app)
 @basic_auth.required
 def secret_view():
     return render_template('secret.html')
-'''
-'''
+
+
+class MyModelView(sqla.ModelView):
+
+    def is_accessible(self):
+        return current_user.is_authenticated
+
 admin = admin.Admin(app, 'Example: Auth',
-                    index_view=MyAdminIndexView(),
+                    #index_view=MyAdminIndexView(),
                     base_template='my_master.html',
                     template_mode='bootstrap4')
-admin.add_view(ModelView(User, db.session))
-admin.add_view(ModelView(Game, db.session))
-admin.add_view(ModelView(Genre, db.session))
+admin.add_view(MyModelView(User, db.session))
+admin.add_view(MyModelView(Game, db.session))
+admin.add_view(MyModelView(Genre, db.session))
 # Add administrative views here
-'''
+
 # Read the swagger.yml file to configure the endpoints
 connex_app.add_api("swagger.yml")
+
+
+@app.context_processor
+def base():
+    search_form = SearchForm()
+    return dict(search_form=search_form)
 
 
 @app.route("/")
@@ -70,6 +83,28 @@ def home():
             most_pop_game = game
             max_count = count
     return render_template("home.html", game=most_pop_game)
+
+
+@app.route("/game-search", methods=['POST'])
+def game_search():
+    search_form = SearchForm()
+    if search_form.validate_on_submit():
+        game_name = search_form.searched.data
+        search = "%{}%".format(game_name)
+        db_games = Game.query.filter(Game.name.like(search)).all()
+        list_games = []
+        for game in db_games:
+            name = game.name
+            price = game.price
+            genre = Genre.query.filter(Genre.id == game.genre_id).one_or_none().name
+            point = game.point
+            pic_path = game.pic_path
+            data = {"name": name, "price": price, "genre": genre, "point": point, "pic_path": pic_path}
+            list_games.append(data)
+        return render_template('catalog.html', games=list_games)
+
+
+
 
 
 @app.route("/deposit/<user_name>")
@@ -254,6 +289,14 @@ def my_games(name):
     return render_template('my_games.html', games=list_games)
 
 
+def create_pdf(game_name, game_price, user_name):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=15)
+    pdf.cell(200, 10, txt="Successfully bought the game {0} for ${1}".format(game_name, game_price),
+             ln=1, align='C')
+    pdf.output("checkout/{0} {1}.pdf".format(game_name, user_name))
+
 @app.route('/<user_name>/buy_game/<game_name>')
 @login_required
 def buy_game(user_name, game_name):
@@ -329,6 +372,7 @@ def buy_game(user_name, game_name):
             "genre": genre,
         }
         list_games.append(data)
+    create_pdf(game.name, game.price, user.name)
     return render_template('my_games.html', games=list_games)
 
 

@@ -34,11 +34,13 @@
         <img width="64" height="64" src="{{ url_for('static',filename='img/icons/gg.png')}}" alt="GG">
     </a>
     <div class="header-block">
-        <div class="search"><input type="search" name="" id="" placeholder="Find a game">
-            <img src="{{ url_for('static',filename='img/icons/search.svg')}}" alt="">
+        <form method="POST" action="{{ url_for('game_search')}}" class="d-flex">
+            {{ search_form.hidden_tag() }}
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+        </form>
 
-        </div>
-        <img src="{{ url_for('static',filename='img/icons/enter')}}" style="width: 25;" alt="">
+
         {% if current_user.is_anonymous %}
         <a href="{{ url_for('login') }}">Login</a>
         <p><a href="{{ url_for('register') }}">Register</a></p>
@@ -99,6 +101,6 @@
         </a>
         <a href="https://vk.com/devdem1" class="footer-icon">
             <img src="/static/img/icons/instagram" style="width: 32;" alt=""></a>
-</p>
+    </p>
 </nav>
 </html>
