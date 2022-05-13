@@ -15,6 +15,9 @@ from werkzeug.urls import url_parse
 import flask_admin as admin
 from flask_admin.contrib import sqla
 from fpdf import FPDF
+from flask_mail import  Message
+from config import mail
+from datetime import datetime
 '''from models import MyAdminIndexView'''
 
 # local modules
@@ -88,6 +91,7 @@ def home():
 @app.route("/game-search", methods=['POST'])
 def game_search():
     search_form = SearchForm()
+    genres = Genre.query.all()
     if search_form.validate_on_submit():
         game_name = search_form.searched.data
         search = "%{}%".format(game_name)
@@ -101,8 +105,44 @@ def game_search():
             pic_path = game.pic_path
             data = {"name": name, "price": price, "genre": genre, "point": point, "pic_path": pic_path}
             list_games.append(data)
-        return render_template('catalog.html', games=list_games)
+        return render_template('catalog.html', games=list_games, genres=genres, years=get_all_years())
 
+
+def year_search(rec_yaers):
+    games = Game.query.filter(Game.date.yaer.in_(rec_yaers)).all()
+    print(games)
+    return games
+
+
+def genre_search(rec_genre_ids):
+    games = Game.query.filter.genre_id.in_(rec_genre_ids).all()
+    print(games)
+    return games
+
+
+@app.route("/global-search", methods=['GET', 'POST'])
+def global_search():
+    if request.method == 'GET':
+         return render_template("search.html", genres=Genre.query.all(), years=get_all_years())
+    if request.method == 'POST':
+        print('IN pOST')
+        if request.form.getlist('genre'):
+            list_genre_ids= []
+            for genre in request.form.getlist('genre'):
+                list_genre_ids.append(genre.id)
+                list_games = genre_search(list_genre_ids)
+            list_id = []
+            for game in list_games:
+                list_id.append(game.id)
+            return redirect(url_for('catalog', games=list_id))
+        if request.form.getlist('year'):
+            print('IN IF YEAR')
+            list_games = year_search(request.form.getlist('year'))
+            list_id = []
+            for game in list_games:
+                list_id.append(str(game.id))
+
+            return redirect(url_for('catalog', games=','.join(list_id),) )
 
 
 
@@ -187,10 +227,10 @@ def user(name):
 
 
 @app.route('/catalog')
-def catalog():
+def catalog(games=None):
     db_games = Game.query.order_by(Game.name).all()
     list_games = []
-
+    print(request.args)
     for game in db_games:
         id = game.id
         name = game.name
@@ -202,6 +242,19 @@ def catalog():
         list_games.append(data)
     return render_template('catalog.html', games=list_games)
 
+
+def get_all_years():
+    games = Game.query.all()
+    years = []
+    for game in games:
+        year = game.date.year
+        flag = True
+        for year_in_list in years:
+            if year_in_list == year:
+                flag = False
+        if flag:
+            years.append(year)
+    return years
 
 @app.route('/page_game/<game_id>')
 def page_game(game_id):
@@ -297,6 +350,8 @@ def create_pdf(game_name, game_price, user_name):
              ln=1, align='C')
     pdf.output("checkout/{0} {1}.pdf".format(game_name, user_name))
 
+
+
 @app.route('/<user_name>/buy_game/<game_name>')
 @login_required
 def buy_game(user_name, game_name):
@@ -372,10 +427,26 @@ def buy_game(user_name, game_name):
             "genre": genre,
         }
         list_games.append(data)
+
+    game = Game.query.filter(
+        Game.name == game_name
+    ).one_or_none()
+
     create_pdf(game.name, game.price, user.name)
+    msg_on_mail(game, user.name)
     return render_template('my_games.html', games=list_games)
 
 
+def msg_on_mail(game, user_name):
+    with app.app_context():
+        msg = Message(subject="Tanks for your choice!",
+                      sender=app.config.get("MAIL_USERNAME"),
+                      recipients=["makd1232255@yandex.ru"],  # replace with your email for testing
+                      body="Thank you.You are successfully bought {game} for ${price}".format(game=game.name, price=game.price))
+
+        with app.open_resource("checkout/{0} {1}.pdf".format(game.name, user_name)) as fp:
+            msg.attach("{0} {1}.pdf".format(game.name, user_name), "application/pdf", fp.read())
+        mail.send(msg)
 
 @app.route('/<name>/my_communities', methods=['GET', 'POST'])
 @login_required
@@ -464,8 +535,10 @@ def join_community(community_name, user_id):
     return render_template('communities.html')
 
 
+
 if __name__ == "__main__":
     connex_app.run(debug=True)
+
 
 
 

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form action="{{ url_for('global_search')}}" method="post">
+    <div class="left-side my-4">
+        <h3 class="sear-head editContent">Жанры</h3>
+        <ul class="w3layouts-box-list">
+            {% for genre in genres %}
+            <li class="editContent">
+                <input type="checkbox" class="checked" name="genre" value="{{ genre }}">
+                <span class="span editContent">{{ genre.name }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="left-side">
+        <h3 class="sear-head editContent">Год</h3>
+        <ul class="w3layouts-box-list">
+            {% for year in years %}
+            <li class="editContent">
+                <input type="checkbox" class="checked" name="year" value="{{ year }}">
+                <span class="span editContent">{{ year }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <button type="submit">Найти</button>
+    </div>
+</form>
+{% endblock %}

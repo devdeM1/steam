@@ -20,6 +20,9 @@ services:
     volumes:
       - ./:/app/
     command: "python3 build_db.py"
+    environment:
+      - user_email=pass
+      - email_password=pass
 
   db:
     image: postgres:13.3

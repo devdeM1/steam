@@ -5,7 +5,8 @@ from sqlalchemy.orm import relationship
 from flask_login import UserMixin
 from datetime import datetime
 import os
-
+import logging
+from logging.handlers import SMTPHandler
 from flask_sqlalchemy import SQLAlchemy
 from wtforms import form, fields, validators
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -34,6 +35,8 @@ class Game(db.Model):
             return flag
         else:
             return flag
+
+
 
 
 class User(UserMixin, db.Model):
@@ -118,6 +121,5 @@ class CommunityGame(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     game_id = db.Column(db.Integer, ForeignKey('table_games.id',ondelete='CASCADE'))
     community_id = db.Column(db.Integer, ForeignKey('table_community.id', ondelete='CASCADE'))
-
 
 

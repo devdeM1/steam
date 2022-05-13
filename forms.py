@@ -5,19 +5,23 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 
 
+class GlobalSearch(FlaskForm):
+
+    submit = SubmitField('Find')
+
 class SearchForm(FlaskForm):
-    searched = StringField('Searched', validators=[DataRequired()])
+    searched = StringField('Searched', validators=[Length(min=0, max=32)])
     submit = SubmitField('Find')
 
 class LoginForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
+    name = StringField('Name', validators=[Length(min=0, max=32)])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
 
 
 class RegistrationForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
+    name = StringField('Name', validators=[Length(min=0, max=32)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField(
