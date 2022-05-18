@@ -433,19 +433,19 @@ def buy_game(user_name, game_name):
     ).one_or_none()
 
     create_pdf(game.name, game.price, user.name)
-    msg_on_mail(game, user.name)
+    msg_on_mail(game, user)
     return render_template('my_games.html', games=list_games)
 
 
-def msg_on_mail(game, user_name):
+def msg_on_mail(game, user):
     with app.app_context():
         msg = Message(subject="Tanks for your choice!",
                       sender=app.config.get("MAIL_USERNAME"),
-                      recipients=["makd1232255@yandex.ru"],  # replace with your email for testing
+                      recipients=[user.email],  # replace with your email for testing
                       body="Thank you.You are successfully bought {game} for ${price}".format(game=game.name, price=game.price))
 
-        with app.open_resource("checkout/{0} {1}.pdf".format(game.name, user_name)) as fp:
-            msg.attach("{0} {1}.pdf".format(game.name, user_name), "application/pdf", fp.read())
+        with app.open_resource("checkout/{0} {1}.pdf".format(game.name, user.name)) as fp:
+            msg.attach("{0} {1}.pdf".format(game.name, user.name), "application/pdf", fp.read())
         mail.send(msg)
 
 @app.route('/<name>/my_communities', methods=['GET', 'POST'])

@@ -13,7 +13,7 @@ app = connex_app.app
 
 
 # Build the Sqlite ULR for SqlAlchemy
-database_url = "postgresql+psycopg2://user_postgres:qwerty123255@db:5432/user_postgres"
+database_url = "postgresql+psycopg2://user_postgres:qwerty123255@localhost:5432/user_postgres"
 
 # Configure the SqlAlchemy part of the app instance
 app.config["SQLALCHEMY_ECHO"] = False
@@ -46,8 +46,8 @@ mail_settings = {
     "MAIL_PORT": 465,
     "MAIL_USE_TLS": False,
     "MAIL_USE_SSL": True,
-    "MAIL_USERNAME": os.environ['user_email'],
-    "MAIL_PASSWORD": os.environ['email_password']
+    "MAIL_USERNAME": 'devdemone@gmail.com',
+    "MAIL_PASSWORD": 'Qwerty123255'
 }
 
 app.config.update(mail_settings)
